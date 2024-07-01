@@ -1,0 +1,36 @@
+local toolScriptSource = [[
+if script.Parent.Parent.Name ~= "Backpack" then 
+    return 
+end
+
+local Tool = script.Parent
+
+local Plr = script:FindFirstAncestorWhichIsA"Player" or game:GetService"Players":GetPlayerFromCharacter(Tool.Parent)
+local Char = Plr.Character or Plr.CharacterAdded:Wait()
+game:GetService"RunService".Heartbeat:Wait()
+local Hum = Char:WaitForChild"Humanoid"
+
+Tool.Activated:Connect(function()
+    if not Char:FindFirstChild"Aspect CLOAKER" then
+        return
+    end
+    Char.BindableEvent:Fire("CloakerDropkick")
+end)
+]]
+
+local serverStorage = game:GetService("ServerStorage")
+local itemsFolder = serverStorage:FindFirstChild("Items") or Instance.new("Folder", serverStorage)
+itemsFolder.Name = "Items"
+
+local tool = Instance.new("Tool")
+tool.Name = "Aspect CLOAKER"
+tool.RequiresHandle = false
+tool.CanBeDropped = false
+tool.ManualActivationOnly = false
+
+local toolScript = Instance.new("Script")
+toolScript.Name = "ToolScript"
+toolScript.Source = toolScriptSource
+toolScript.Parent = tool
+
+tool.Parent = itemsFolder
